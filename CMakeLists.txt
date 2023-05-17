@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(GTest REQUIRED)
 include_directories(
         /usr/local/include
-        /users/eoche/osquery
+        $ENV{HOME}/osquery
         src
         ${GLOG_INCLUDE_DIRS}
         ${GFLAGS_INCLUDE_DIRS}
