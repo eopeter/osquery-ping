@@ -6,13 +6,13 @@
 #include <osquery/core/system.h>
 
 int main(int argc, char* argv[]) {
-    // Note 4: Start logging, threads, etc.
+    // Start logging, threads, etc.
     osquery::Initializer runner(argc, argv, osquery::ToolType::EXTENSION);
 
-    // Note 5: Connect to osqueryi or osqueryd.
+    // Connect to osqueryi or osqueryd.
     auto status = osquery::startExtension("ping", "0.0.1");
     if (!status.ok()) {
-        //LOG(ERROR) << status.getMessage();
+        LOG(ERROR) << status.getMessage();
         runner.requestShutdown(status.getCode());
     }
 

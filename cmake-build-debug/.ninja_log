@@ -1,9 +1,0 @@
-# ninja log v5
-11	117	1684344479360819377	build.ninja	9a6dddcfe0335cbd
-1	5502	1684340308288958461	CMakeFiles/osquery_ping.dir/src/utils.cpp.o	7b27345ab45e0566
-1	5743	1684342504403333099	CMakeFiles/osquery_ping.dir/src/shell.cpp.o	798f632d2620c42b
-1	6012	1684344524190831914	CMakeFiles/osquery-extension-ping.dir/src/shell.cpp.o	a2a001fb869c8c78
-20	4927	1684345103138397749	CMakeFiles/osquery-extension-ping.dir/src/shell.cpp.o	a2a001fb869c8c78
-23	2510	1684345275691886634	CMakeFiles/osquery-extension-ping.dir/main.cpp.o	2e1acd8131f6771a
-24	3511	1684345276687983897	CMakeFiles/osquery-extension-ping.dir/tests/table_test.cpp.o	d1d30ed61a756f12
-24	3785	1684345276963826657	CMakeFiles/osquery-extension-ping.dir/src/table.cpp.o	f738c3163fb5c459

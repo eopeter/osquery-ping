@@ -1,3 +1,0 @@
-/Users/eoche/Projects/external/osquery-ping/cmake-build-debug/CMakeFiles/osquery-extension-ping.dir
-/Users/eoche/Projects/external/osquery-ping/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/eoche/Projects/external/osquery-ping/cmake-build-debug/CMakeFiles/rebuild_cache.dir

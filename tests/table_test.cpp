@@ -1,6 +1,6 @@
-/*
-* Copyright (c) 2023 Emmanuel Oche
-*/
+//
+// Created by Emmanuel Oche on 5/17/23.
+//
 
 #include "table.h"
 #include <gtest/gtest.h>
@@ -36,7 +36,7 @@ namespace table_tests {
         };
         test singlePing, multiplePing, badHost, noHost;
 
-        singlePing.pingCommand = "ping -c 1 google.com";
+        singlePing.pingCommand = "ping -c 1 abc.com";
         singlePing.expectedLatencyCount = 1;
         singlePing.expectedLatencies = { 35.532 };
         singlePing.output = "PING abc.com (142.251.40.206): 56 data bytes\n"
@@ -46,7 +46,7 @@ namespace table_tests {
                         "1 packets transmitted, 1 packets received, 0.0% packet loss\n"
                         "round-trip min/avg/max/stddev = 35.532/35.532/35.532/0.000 ms";
 
-        multiplePing.pingCommand = "ping -c 4 google.com";
+        multiplePing.pingCommand = "ping -c 4 abc.com";
         multiplePing.expectedLatencyCount = 4;
         multiplePing.expectedLatencies = { 39.901, 32.460, 32.881, 36.064 };
         multiplePing.output = "PING abc.com (142.250.80.78): 56 data bytes\n"

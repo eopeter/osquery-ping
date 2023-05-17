@@ -1,5 +1,5 @@
 #
-#
+#  Created by Emmanuel Oche on 5/17/23.
 #
 cmake_minimum_required(VERSION 3.25)
 project(osquery-extension-ping)
