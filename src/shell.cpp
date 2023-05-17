@@ -32,6 +32,7 @@ bool extension::Shell::Execute(ProcessOutput& output,
 
         io_service.run();
 
+        // get the output, error and exit code
         output.std_output = process_stdout.get();
         output.std_error = process_stderr.get();
         output.exit_code = process.exit_code();

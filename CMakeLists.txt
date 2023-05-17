@@ -4,24 +4,36 @@
 cmake_minimum_required(VERSION 3.25)
 project(osquery-extension-ping)
 
-set(CMAKE_CXX_STANDARD 14)
+function(PingMain)
+    set(CMAKE_CXX_STANDARD 14)
 
-find_package(GTest REQUIRED)
-include_directories(
-        /usr/local/include
-        $ENV{HOME}/osquery
-        src
-        ${GLOG_INCLUDE_DIRS}
-        ${GFLAGS_INCLUDE_DIRS}
-)
+    find_package(GTest REQUIRED)
+    include_directories(
+            /usr/local/include
+            $ENV{HOME}/osquery
+            src
+            ${GLOG_INCLUDE_DIRS}
+            ${GFLAGS_INCLUDE_DIRS}
+    )
 
-add_executable(osquery-extension-ping
-        main.cpp
-        src/table.cpp
-        src/table.h
-        src/shell.cpp
-        src/shell.h
-        tests/table_test.cpp
-)
+    add_executable(osquery-extension-ping
+            main.cpp
+            src/table.cpp
+            src/table.h
+            src/shell.cpp
+            src/shell.h
+            tests/table_test.cpp
+    )
 
-target_link_libraries(osquery-extension-ping ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
+    target_link_libraries(osquery-extension-ping ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
+
+    addOsqueryExtensionEx("PingTablePlugin" "table" "ping"
+        SOURCES ${project_common_source_files} src/table.h src/table.cpp
+        INCLUDEDIRS "${CMAKE_CURRENT_SOURCE_DIR}/src"
+        MAININCLUDES table.h
+        LIBRARIES ${project_libraries}
+    )
+
+endfunction()
+
+PingMain()

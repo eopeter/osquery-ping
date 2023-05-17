@@ -4,6 +4,7 @@
 
 #include <osquery/sdk/sdk.h>
 #include <osquery/core/system.h>
+#include <osquery/logger/logger.h>
 
 int main(int argc, char* argv[]) {
     // Start logging, threads, etc.

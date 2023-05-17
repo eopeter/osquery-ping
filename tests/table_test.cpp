@@ -10,22 +10,37 @@
 
 using ::testing::AtLeast;
 
-namespace table_tests {
+namespace extension {
 
-    class MockShell : public extension::Shell {
+    class MockShell : public Shell {
         public:
             MOCK_METHOD0(Execute, void());
     };
 
     class PingTablePluginTest : public testing::Test {
-    protected:
-        void SetUp() override {
+        protected:
+            void SetUp() override {
 
-        }
-        void TearDown() override {
+            }
+            void TearDown() override {
 
-        }
+            }
     };
+
+    TEST_F(PingTablePluginTest, TestIsValidHost) {
+        // init the plugin
+        PingTablePlugin table;
+
+        // attempt to sanitize the provided input
+        auto host = "abc.com";
+        auto valid = table.isValidHost(host);
+
+        // check that the correct value to returned
+        EXPECT_TRUE(valid);
+    }
+
+    // TODO add test cases for invalid host, valid ip address
+
 
     TEST_F(PingTablePluginTest, TestParsePingOutputForLatencies) {
         struct test {
@@ -69,7 +84,7 @@ namespace table_tests {
         noHost.expectedLatencies = {};
 
         std::vector<test> testCases = {singlePing, multiplePing, badHost, noHost};
-        extension::PingTablePlugin table;
+        PingTablePlugin table;
        for(const auto& testCase : testCases) {
            std::vector<double> latencies = table.parsePingOutputForLatencies(testCase.output);
 
@@ -86,17 +101,34 @@ namespace table_tests {
     TEST_F(PingTablePluginTest, TestPingHost) {
         MockShell shell;
 
-        EXPECT_CALL(shell, Execute())              // #3
+        EXPECT_CALL(shell, Execute())
                 .Times(AtLeast(1));
 
-        extension::PingTablePlugin table;
+        PingTablePlugin table;
         table.shell = shell;
 
         std::string output = table.pingHost("abc.com");
     }
 
+    TEST_F(PingTablePluginTest, TestTableColumns) {
+
+        // initialize the plugin
+        PingTablePlugin table;
+
+        // Generate the query data
+        auto results = table.columns();
+
+        // Check that 2 columns are returned
+        ASSERT_EQ(results.size(), 2);
+    }
+
     TEST_F(PingTablePluginTest, TestTableGenerate) {
-        extension::PingTablePlugin table;
+        // init a mock shell
+        MockShell shell;
+
+        // init the plugin and set the shell to the mock
+        PingTablePlugin table;
+        table.shell = shell;
 
         // Set the process events in the query context
         osquery::QueryContext ctx;
@@ -107,6 +139,9 @@ namespace table_tests {
         // Check that no results are returned
         ASSERT_EQ(results.size(), 0);
     }
+
+    // TODO Add tests that checks valid rows returned
+    // TODO Add Integration test that takes an SQL query
 
 }
 
