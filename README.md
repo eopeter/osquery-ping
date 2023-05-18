@@ -1,5 +1,5 @@
 # osquery-ping
-An Osquery extension that adds a table called `ping` to the set of Standard Osquery tables. It returns the number of 
+An Osquery extension that adds a virtual table called `ping` to the set of Standard Osquery tables. It returns the number of 
 milliseconds measured between an ICMP request and the reply from the specified host. 
 
 
