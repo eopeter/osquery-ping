@@ -11,10 +11,10 @@ function(main)
 
     # Add extension source files
     set(PROJECT_SOURCE_FILES
-            main.cpp
 
             src/table.cpp
             src/table.h
+
             src/shell.cpp
             src/shell.h
 
@@ -32,8 +32,6 @@ function(main)
 
     # find packages needed to build
     find_package(GTest REQUIRED)
-    find_package(glog 0.6.0 REQUIRED)
-    find_package(gflags REQUIRED)
     find_package(Boost REQUIRED COMPONENTS thread system)
 
     # Specify the include directories for the osquery SDK and header files
@@ -50,29 +48,17 @@ function(main)
     # Specify the link directories for the osquery library files
     link_directories(
             ${OSQUERY_PATH}
-            ${USR_LOCAL_INCLUDE_DIR}/boost/thread
-            ${USR_LOCAL_INCLUDE_DIR}/boost/system
     )
 
     # Add the executable target for your extension and link against the osquery libraries
     add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
-    target_link_libraries(${PROJECT_NAME}
-            ${OSQUERY_SDK_DIR}/libosquery_sdk_pluginsdk.a
-            ${OSQUERY_PATH}/build/osquery/main/libosquery_main.a
-            ${OSQUERY_PATH}/build/osquery/core/libosquery_core.a
-            Boost::thread
-            Boost::system
-            glog::glog
-            gflags
 
+    addOsqueryExtensionEx("PingTablePlugin" "table" "ping"
+        SOURCES ${PROJECT_SOURCE_FILES}
+        INCLUDEDIRS "${CMAKE_CURRENT_SOURCE_DIR}/src"
+        MAININCLUDES src/table.h
+        LIBRARIES ${project_libraries}
     )
-
-#    addOsqueryExtensionEx("PingTablePlugin" "table" "ping"
-#        SOURCES ${PROJECT_SOURCE_FILES}
-#        INCLUDEDIRS "${CMAKE_CURRENT_SOURCE_DIR}/src"
-#        MAININCLUDES src/table.h
-#        LIBRARIES ${project_libraries}
-#    )
 
 endfunction()
 
