@@ -25,6 +25,10 @@ namespace extension {
             virtual bool Execute(ProcessOutput& output,
                                  const std::string& path,
                                  const std::vector<std::string>& args);
+            /**
+             * The destructor for the Shell
+             */
+            virtual ~Shell();
 
     };
 }

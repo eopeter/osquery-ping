@@ -3,12 +3,12 @@
 //
 
 #include "shell.h"
-#include <boost/asio.hpp>
-#include <boost/process.hpp>
-#include <future>
+#include <cstdlib>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
-namespace boostproc = boost::process;
-namespace boostasio = boost::asio;
 
 bool extension::Shell::Execute(ProcessOutput& output,
                     const std::string& path,
@@ -16,30 +16,43 @@ bool extension::Shell::Execute(ProcessOutput& output,
     output = {};
 
     try {
-        std::future<std::string> process_stdout;
-        std::future<std::string> process_stderr;
+        // construct the command from the path and args
+        std::string command = path;
+        for (const auto& arg : args) {
+            command += " " + arg;
+        }
 
-        boostasio::io_service io_service;
+        // Open pipes for reading output and error
+        FILE* pipe = popen(command.c_str(), "r");
+        if (pipe == nullptr) {
+            throw std::runtime_error("popen() failed!");
+        }
 
-        // clang-format off
-        boostproc::child process(
-                path, boostproc::args(args),
-                boostproc::std_out > process_stdout,
-                boostproc::std_err > process_stderr,
-                io_service
-        );
-        // clang-format on
+        constexpr int bufferSize = 256;
+        char buffer[bufferSize];
 
-        io_service.run();
+        std::string stdout_output;
+        std::string stderr_output;
 
-        // get the output, error and exit code
-        output.std_output = process_stdout.get();
-        output.std_error = process_stderr.get();
-        output.exit_code = process.exit_code();
+        // Read output from stdout pipe
+        while (fgets(buffer, bufferSize, pipe) != nullptr) {
+            stdout_output += buffer;
+        }
+
+        // Close the pipe and retrieve the exit code
+        int exit_status = pclose(pipe);
+
+        // Store the output, error, and exit code
+        output.std_output = stdout_output;
+        output.std_error = stderr_output + " command: " + command;
+        output.exit_code = WEXITSTATUS(exit_status);
 
         return true;
-
     } catch (...) {
         return false;
     }
+}
+
+extension::Shell::~Shell() {
+
 }

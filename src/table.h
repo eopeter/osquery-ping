@@ -69,8 +69,5 @@ namespace extension {
              */
             ~PingTablePlugin() override;
     };
-
-    // define the ping table.
-    REGISTER_EXTERNAL(PingTablePlugin, "table", "ping");
 }
 
