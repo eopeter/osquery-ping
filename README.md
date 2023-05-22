@@ -27,14 +27,18 @@ The result of the above query will look like:
 ```
 
 ## Running From Compiled Binaries
-* Download the extension in the [releases](https://github.com/eopeter/osquery-ping/releases) page for this repository
-* Run `sudo osqueryi --extension /Users/<user>/Downloads/osquery_extension_ping.ext` from terminal
+* Download the latest extension in the [releases](https://github.com/eopeter/osquery-ping/releases) page for this repository
+* Move the downloaded extension to `/var/osquery/extensions` path. If the path `\var\osquery` does not exist, you may need to install Osquery using `brew install --cask osquery` and then create the extensions folder using `mkdir extensions` while in the `/var/osquery` path
+* Please note that macOS might complain about the file being downloaded from the internet. You can attempt to `right click on the file and then click Open` from the final path to verify that you downloaded the file and it is safe
+* The osquery agent will refuse to load an extension executable from the filesystem if the file's permissions allow write or modify by non-privileged accounts. Before loading the extension, change the owner of `\var\osquery\extensions\osquery-extension-ping.ext` file to be the root account using `chown root` and the permission of the file using `chmod 0744`
+* Run `sudo osqueryi --extension /var/osquery/extensions/osquery-extension-ping.ext` from terminal or optionally, follow the [Autoloading Extensions](https://osquery.readthedocs.io/en/latest/deployment/extensions/#auto-loading-extensions) steps to allow this extension to auto load
 * Once `Osqueryi` starts, you should be able to execute the sample sql query above
+* If the above command does not work, see the troubleshooting steps below
 
 ## Building & Running From Source (Linux/ macOs)
 * Follow the instructions to install, configure and build `osquery` at [readthedocs.io](https://osquery.readthedocs.io/en/latest/development/building/) and stop before the configure step.
 * Clone this repository
-* Symlink the `osquery-ping` folder into `osquery/external/extension_osquery-extension-ping` using the command
+* Symlink the local path to the repository `osquery-ping` folder into `osquery/external/extension_osquery-extension-ping` using the command
 ```
 cd osquery
 ln -s ../../osquery-ping external/extension_osquery-extension-ping
@@ -42,20 +46,12 @@ ln -s ../../osquery-ping external/extension_osquery-extension-ping
 * `cd build`
 * Resume following the instruction at [readthedocs.io](https://osquery.readthedocs.io/en/latest/development/building/)
 * Note that Osquery build step above assumes building into `users/<user>/osquery`
-* Run `sudo osqueryi --extension osquery/build/external/extension_ping/osquery_extension_ping.ext`
+* Run `sudo osqueryi --extension osquery/build/external/extension_osquery-extension-ping/osquery-extension-ping.ext`
 
 ## Troubleshooting
-* Use the `--verbose` flag when troubleshooting to see more details on what is going on
-* If you encounter the following error `[Ref #1382] Extension binary has unsafe permissions: osquery/build/external/extension_osquery-extension-ping/osquery-extension-ping.ext`, run as sudo with `--allow-unsafe` flag with the `osqueryi` command.
-* If your query does not work against the table, make sure you have the correct socket for `osqueryi` by running the following command `select path from osquery_extensions` once your start `osqueryi`. The path in the result should be passed to the `--socket` flag when attaching your extention
-```sql
-osquery> select path from osquery_extensions;
-+-------------------------------------------------------------------------+
-| path                                                                    |
-+-------------------------------------------------------------------------+
-| /var/folders/w5/pvflyg8942d4041xjq5vxdk4001slv/T/osquery-25846/shell.em |
-+-------------------------------------------------------------------------+
-```
+* Use the `--verbose` flag on the `osquery` command when troubleshooting to see more details on what is going on
+* If you encounter the following error when building from source `[Ref #1382] Extension binary has unsafe permissions: osquery/build/external/extension_osquery-extension-ping/osquery-extension-ping.ext`, run the `osqueryi` command as sudo with `--allow-unsafe` flag.
+* If you encounter the following error repeatedly `Extension respawing too quickly: ...` (press `control + Z` to terminate it) it could mean the permissions are not set correctly on the extension file. See how to set up permissions when running from compiled binary above
 
 ## Design Consideration
 
